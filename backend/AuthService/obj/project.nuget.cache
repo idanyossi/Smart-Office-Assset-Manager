@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "K70hm9G/Pxc=",
+  "success": true,
+  "projectFilePath": "D:\\Resumes\\landacorp cv\\Assignment\\Smart-Office-Assset-Manager\\AuthService\\AuthService.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Idan\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.11\\microsoft.aspnetcore.openapi.9.0.11.nupkg.sha512",
+    "C:\\Users\\Idan\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
