@@ -1,0 +1,38 @@
+# --- .NET Build Artifacts ---
+[Bb]in/
+[Oo]bj/
+out/
+publish/
+
+# --- Sensitive Configuration (CRITICAL) ---
+# This prevents your DB passwords from being pushed to GitHub
+**/appsettings.json
+**/appsettings.Development.json
+**/appsettings.Production.json
+
+# --- User Secrets ---
+# Even if secrets are stored outside the folder, this is a safety net
+secrets.json
+.microsoft.dotnet.secret-manager.resid
+
+# --- Database & Local Storage ---
+*.db
+*.sqlite
+*.log
+.data/
+
+# --- IDE & Editor Settings ---
+.vscode/
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+.idea/
+
+# --- Environment Variables ---
+.env
+.env.*
+
+# --- OS Specific ---
+.DS_Store
+Thumbs.db

@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-interface AuthFormData {
+export interface AuthFormData {
   name: string;
   password: string;
   role: "Member" | "Admin";

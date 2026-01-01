@@ -1,9 +1,9 @@
 namespace API.DTOs
 {
-    public interface RegisterDto
+    public class RegisterDto
     {
-        string Username { get; set; }
-        string Password { get; set; }
-        string Role { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string Role { get; set; }
     }
 }
