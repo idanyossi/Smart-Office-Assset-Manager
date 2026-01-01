@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Resumes\\landacorp cv\\Assignment\\Smart-Office-Assset-Manager\\AuthService\\AuthService.csproj": {}
+    "D:\\Resumes\\landacorp cv\\Assignment\\Smart-Office-Assset-Manager\\backend\\API\\API.csproj": {}
   },
   "projects": {
-    "D:\\Resumes\\landacorp cv\\Assignment\\Smart-Office-Assset-Manager\\AuthService\\AuthService.csproj": {
+    "D:\\Resumes\\landacorp cv\\Assignment\\Smart-Office-Assset-Manager\\backend\\API\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Resumes\\landacorp cv\\Assignment\\Smart-Office-Assset-Manager\\AuthService\\AuthService.csproj",
-        "projectName": "AuthService",
-        "projectPath": "D:\\Resumes\\landacorp cv\\Assignment\\Smart-Office-Assset-Manager\\AuthService\\AuthService.csproj",
+        "projectUniqueName": "D:\\Resumes\\landacorp cv\\Assignment\\Smart-Office-Assset-Manager\\backend\\API\\API.csproj",
+        "projectName": "API",
+        "projectPath": "D:\\Resumes\\landacorp cv\\Assignment\\Smart-Office-Assset-Manager\\backend\\API\\API.csproj",
         "packagesPath": "C:\\Users\\Idan\\.nuget\\packages\\",
-        "outputPath": "D:\\Resumes\\landacorp cv\\Assignment\\Smart-Office-Assset-Manager\\AuthService\\obj\\",
+        "outputPath": "D:\\Resumes\\landacorp cv\\Assignment\\Smart-Office-Assset-Manager\\backend\\API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Idan\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -44,9 +44,21 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.11, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.0, )"
             }
           },
           "imports": [
