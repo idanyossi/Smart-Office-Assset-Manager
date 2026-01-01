@@ -1,0 +1,14 @@
+root = true
+
+[*.cs]
+# Indentation and spacing
+indent_style = space
+indent_size = 4
+dotnet_separate_import_directive_groups = true
+
+# New line preferences
+dotnet_style_qualification_for_field = false:silent
+dotnet_style_qualification_for_property = false:silent
+
+# Use PascalCase for methods and classes (Standard C#)
+dotnet_naming_rule.methods_and_properties_must_be_pascal_case.style = pascal_case_style

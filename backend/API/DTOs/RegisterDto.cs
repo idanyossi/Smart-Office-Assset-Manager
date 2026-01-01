@@ -1,7 +1,9 @@
-
-public interface RegisterDTO
+namespace API.DTOs
 {
-    string Username { get; set; }
-    string Password { get; set; }
-    string Role { get; set; }
+    public interface RegisterDto
+    {
+        string Username { get; set; }
+        string Password { get; set; }
+        string Role { get; set; }
+    }
 }
