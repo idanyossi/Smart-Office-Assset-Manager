@@ -2,9 +2,13 @@ import { AuthForm } from "../../components/AuthForm/AuthForm";
 import { CenteredPageWrapper } from "../../components/AuthForm/CenteredPageWrapper";
 import type { AuthFormData } from "../../components/AuthForm/AuthForm";
 import { useNavigate } from "react-router-dom";
+import { observer } from "mobx-react-lite"; // Import observer
+import { useStore } from "../../stores/store";
 
-export const Register = () => {
+export const Register = observer(() => {
+  const { userStore } = useStore();
   const navigate = useNavigate();
+
   const handleRegister = async (data: AuthFormData) => {
     const payload = {
       username: data.name,
@@ -13,24 +17,13 @@ export const Register = () => {
     };
 
     try {
-      const response = await fetch("https://localhost:7061/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-      if (response.ok) {
-        alert("Registration successful! You can now log in.");
-        navigate("/login");
-      } else {
-        const errorData = await response.json();
-        alert("Registration failed: " + errorData.message);
-      }
+      await userStore.register(payload);
+      alert("Registration successful! You can now log in.");
+      navigate("/login");
     } catch (error) {
       console.error("Error during registration:", error);
+      alert("Registration failed.");
     }
-        
   }
 
   return (
@@ -38,4 +31,4 @@ export const Register = () => {
       <AuthForm type="register" onSubmit={handleRegister} />
     </CenteredPageWrapper>
   );
-};
+});

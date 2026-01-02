@@ -26,5 +26,20 @@ namespace API.Controllers
             }
             return BadRequest(result.Errors);
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
+        {
+            var token = await _authService.LoginUserAsync(dto);
+            if (token != null)
+            {
+                return Ok(new
+                {
+                    Username = dto.Username,
+                    Token = token
+                });
+            }
+            return Unauthorized(new { Message = "Invalid username or password" });
+        }
     }
 }

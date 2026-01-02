@@ -1,14 +1,28 @@
 import { AuthForm } from "../../components/AuthForm/AuthForm";
 import { CenteredPageWrapper } from "../../components/AuthForm/CenteredPageWrapper";
+import {observer} from "mobx-react-lite"; // Import observer
+import { useStore } from "../../stores/store";
+import { useNavigate } from "react-router-dom";
 
-export const Login = () => {
-  const handleLogin = (data: {
-    name: string;
-    password: string;
-    role: string;
-  }) => {
-    // Handle registration logic here
-    console.log("Logging in user:", data);
+export const Login = observer(() => {
+  const { userStore } = useStore();
+  const navigate = useNavigate();
+
+  // Define the interface for the incoming form data
+  const handleLogin = async (data: { name: string; password: string }) => {
+    const payload = {
+      username: data.name,
+      password: data.password
+    };
+
+    try {
+      await userStore.login(payload);
+      
+      navigate("/"); 
+    } catch (error) {
+      console.error("Login failed", error);
+      alert("Invalid username or password");
+    }
   };
 
   return (
@@ -16,4 +30,4 @@ export const Login = () => {
       <AuthForm type="login" onSubmit={handleLogin} />
     </CenteredPageWrapper>
   );
-};
+});

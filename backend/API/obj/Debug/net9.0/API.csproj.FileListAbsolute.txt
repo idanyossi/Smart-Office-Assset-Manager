@@ -120,3 +120,11 @@ D:\Resumes\landacorp cv\Assignment\Smart-Office-Assset-Manager\backend\API\obj\D
 D:\Resumes\landacorp cv\Assignment\Smart-Office-Assset-Manager\backend\API\obj\Debug\net9.0\API.pdb
 D:\Resumes\landacorp cv\Assignment\Smart-Office-Assset-Manager\backend\API\obj\Debug\net9.0\API.genruntimeconfig.cache
 D:\Resumes\landacorp cv\Assignment\Smart-Office-Assset-Manager\backend\API\obj\Debug\net9.0\ref\API.dll
+D:\Resumes\landacorp cv\Assignment\Smart-Office-Assset-Manager\backend\API\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\Resumes\landacorp cv\Assignment\Smart-Office-Assset-Manager\backend\API\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
+D:\Resumes\landacorp cv\Assignment\Smart-Office-Assset-Manager\backend\API\bin\Debug\net9.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\Resumes\landacorp cv\Assignment\Smart-Office-Assset-Manager\backend\API\bin\Debug\net9.0\Microsoft.IdentityModel.Logging.dll
+D:\Resumes\landacorp cv\Assignment\Smart-Office-Assset-Manager\backend\API\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
+D:\Resumes\landacorp cv\Assignment\Smart-Office-Assset-Manager\backend\API\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Resumes\landacorp cv\Assignment\Smart-Office-Assset-Manager\backend\API\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
+D:\Resumes\landacorp cv\Assignment\Smart-Office-Assset-Manager\backend\API\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
