@@ -5,17 +5,29 @@ import {
   Button,
   Box,
   Container,
+  useTheme,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import { useStore } from "../../stores/store";
 
-export const Navbar = () => {
+export const Navbar = observer(() => {
+  const { userStore } = useStore();
+  const theme = useTheme();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    userStore.logout();
+    navigate("/login");
+  };
+
   return (
     <AppBar
       position="sticky"
       sx={{
         width: "100%",
-        backgroundColor: "#0a0a0a",
-        borderBottom: "1px solid #333",
+        backgroundColor: theme.palette.background.default,
+        borderBottom: `1px solid ${theme.palette.divider}`,
       }}
     >
       <Container maxWidth="xl">
@@ -26,7 +38,7 @@ export const Navbar = () => {
             sx={{
               flex: 2,
               fontWeight: "bold",
-              color: "#00adef",
+              color: theme.palette.primary.main,
               letterSpacing: ".2rem",
               textAlign: "center",
             }}
@@ -41,21 +53,43 @@ export const Navbar = () => {
               alignItems: "center",
             }}
           >
-            <Button
-              color="inherit"
-              component={Link}
-              to="/register"
-              sx={{ mx: 1 }}
-            >
-              Register
-            </Button>
-            <Button color="inherit" component={Link} to="/login" sx={{ mx: 1 }}>
-              Login
-            </Button>
-            {/* The "Admin Only" Add button - we will logic-gate this later */}
+            {userStore.token ? (
+              /* LOGGED IN STATE */
+              <>
+                <Typography 
+                    variant="body2" 
+                    sx={{ color: theme.palette.text.secondary, mr: 2, fontWeight: 'medium' }}
+                >
+                  Hello, <strong>{userStore.user}</strong>
+                </Typography>
+                <Button 
+                    variant="outlined" 
+                    color="primary" 
+                    size="small" 
+                    onClick={handleLogout}
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              /* LOGGED OUT STATE */
+              <>
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/register"
+                  sx={{ mx: 1 }}
+                >
+                  Register
+                </Button>
+                <Button color="inherit" component={Link} to="/login" sx={{ mx: 1 }}>
+                  Login
+                </Button>
+              </>
+            )}
           </Box>
         </Toolbar>
       </Container>
     </AppBar>
   );
-};
+});

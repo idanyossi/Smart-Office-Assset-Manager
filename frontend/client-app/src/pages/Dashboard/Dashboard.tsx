@@ -10,10 +10,15 @@ import {
   TableRow,
   Button,
   Box,
+  useTheme,
 } from "@mui/material";
+import { observer } from "mobx-react-lite";
+import { useStore } from "../../stores/store";
 
-export const Dashboard = () => {
-  // Placeholder data - this will eventually come from GET /assets
+export const Dashboard = observer(() => {
+
+  const { userStore } = useStore();
+  const theme = useTheme();
   const assets = [
     { id: 1, name: "Nanographic Press S11", type: "Press", status: "Active" },
     { id: 2, name: "Meeting Room Alpha", type: "Room", status: "Booked" },
@@ -29,16 +34,17 @@ export const Dashboard = () => {
           alignItems: "flex-end",
         }}
       >
-        <Typography variant="h4" sx={{ color: "white", lineHeight: 1 }}>
+        <Typography variant="h4" sx={{ color: theme.palette.text.primary, lineHeight: 1 }}>
           Office Assets
         </Typography>
 
+        {userStore.role === "Admin" && (
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
             variant="contained"
             sx={{
               borderRadius: 0,
-              bgcolor: "#00adef",
+              bgcolor: theme.palette.primary.main,
               fontWeight: "bold",
               px: 4,
               "&:hover": { bgcolor: "#008ec4" },
@@ -47,15 +53,17 @@ export const Dashboard = () => {
             + ADD ASSET
           </Button>
         </Box>
+        )}
+       
       </Box>
 
-      <TableContainer component={Paper} sx={{ bgcolor: "#161616" }}>
+      <TableContainer component={Paper} sx={{ bgcolor: theme.palette.background.paper }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ color: "#00adef" }}>Name</TableCell>
-              <TableCell sx={{ color: "#00adef" }}>Type</TableCell>
-              <TableCell sx={{ color: "#00adef" }}>Status</TableCell>
+              <TableCell sx={{ color: theme.palette.primary.main }}>Name</TableCell>
+              <TableCell sx={{ color: theme.palette.primary.main }}>Type</TableCell>
+              <TableCell sx={{ color: theme.palette.primary.main }}>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -71,4 +79,4 @@ export const Dashboard = () => {
       </TableContainer>
     </Container>
   );
-};
+});
