@@ -11,18 +11,47 @@ import {
   Button,
   Box,
   useTheme,
+  DialogTitle,
+  DialogContent,
+  Dialog,
+  TextField,
+  DialogActions,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../../stores/store";
+import { useEffect, useState } from "react";
+import type { Asset } from "../../api/agent";;
 
 export const Dashboard = observer(() => {
 
-  const { userStore } = useStore();
+  const { assetStore ,userStore } = useStore();
   const theme = useTheme();
-  const assets = [
-    { id: 1, name: "Nanographic Press S11", type: "Press", status: "Active" },
-    { id: 2, name: "Meeting Room Alpha", type: "Room", status: "Booked" },
-  ];
+
+  const [open, setOpen] = useState(false);
+  const [newAsset,setNewAsset]=useState<Asset>({name:'',type:''});
+
+  useEffect(() => {
+    assetStore.loadAssets();
+  },[assetStore]);
+
+  const handleOpen = () => {
+    setOpen(true);
+  }
+  const handleClose = () => {
+    setOpen(false);
+    setNewAsset({name:'',type:''});
+  }
+  
+
+  const handleAddAsset = async () => {
+    try{
+      await assetStore.createAsset(newAsset);
+      handleClose();
+      setNewAsset({name:'',type:''});
+    } catch (error) {
+      console.error("Failed to add asset", error);
+    } 
+  }
 
   return (
     <Container sx={{ mt: 4 }}>
@@ -42,6 +71,7 @@ export const Dashboard = observer(() => {
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
             variant="contained"
+            onClick={handleOpen}
             sx={{
               borderRadius: 0,
               bgcolor: theme.palette.primary.main,
@@ -62,21 +92,43 @@ export const Dashboard = observer(() => {
           <TableHead>
             <TableRow>
               <TableCell sx={{ color: theme.palette.primary.main }}>Name</TableCell>
-              <TableCell sx={{ color: theme.palette.primary.main }}>Type</TableCell>
-              <TableCell sx={{ color: theme.palette.primary.main }}>Status</TableCell>
+              <TableCell sx={{ color: theme.palette.primary.main }}>Asset Type</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {assets.map((asset) => (
-              <TableRow key={asset.id}>
+            {assetStore.assets.map((asset) => (
+              <TableRow key={asset.id || asset.name}>
                 <TableCell>{asset.name}</TableCell>
-                <TableCell>{asset.type}</TableCell>
-                <TableCell>{asset.status}</TableCell>
+                <TableCell>{asset.type}</TableCell>           
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Add New Office Resource</DialogTitle>
+        <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1, minWidth: 300 }}>
+          <TextField
+            label="Asset Name"
+            fullWidth
+            value={newAsset.name}
+            onChange={(e) => setNewAsset({ ...newAsset, name: e.target.value })}
+          />
+          <TextField
+            label="Asset Type"
+            fullWidth
+            value={newAsset.type}
+            onChange={(e) => setNewAsset({ ...newAsset, type: e.target.value })}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleAddAsset} variant="contained" disabled={!newAsset.name || !newAsset.type}>
+            Save to MongoDB
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 });

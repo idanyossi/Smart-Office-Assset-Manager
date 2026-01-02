@@ -16,7 +16,7 @@ namespace API.Services
         public TokenService(IConfiguration config, UserManager<IdentityUser> userManager)
         {
             _userManager = userManager;
-            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"] ?? string.Empty));
         }
 
         public async Task<string> CreateToken(IdentityUser user)

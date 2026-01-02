@@ -1,0 +1,26 @@
+services:
+  # 1. Identity Service Database (Relational)
+  identity-db:
+    image: postgres:latest
+    container_name: smart_office_identity_db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: IdentityDb
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+
+  # 2. Resource Management Database (NoSQL)
+  resource-db:
+    image: mongo:latest
+    container_name: smart_office_resource_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  postgres_data:
+  mongo_data:

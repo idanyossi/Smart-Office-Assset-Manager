@@ -6,9 +6,16 @@ using Microsoft.AspNetCore.Identity;
 using API.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddSingleton<IMongoClient>(sp =>
+{
+    var connectionString = builder.Configuration.GetSection("MongoDB:ConnectionString").Value;
+    return new MongoClient(connectionString);
+});
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -65,6 +72,25 @@ app.UseCors("AllowReactApp");
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+
+        // Then apply any pending migrations
+        await context.Database.MigrateAsync();
+
+        Console.WriteLine("--> Database and Migrations are Ready!");
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred during DB initialization");
+    }
+}
 
 
 app.MapControllers();

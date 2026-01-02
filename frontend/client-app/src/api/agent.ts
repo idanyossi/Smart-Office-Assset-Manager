@@ -11,6 +11,12 @@ export interface UserResponse {
     token: string;
 }
 
+export interface Asset {
+    id?: number;
+    name: string;
+    type: string;
+}
+
 axios.defaults.baseURL = 'https://localhost:7061/api';
 
 axios.interceptors.request.use(config => {
@@ -33,8 +39,14 @@ const Account = {
     register: (user: UserCredentials) => requests.post<UserResponse>('/auth/register', user),
 }
 
+const Assets = {
+    list: () => requests.get<Asset[]>('/asset'),
+    create: (asset: Asset) => requests.post<void>('/asset', asset),
+}
+
 const agent ={
-    Account
+    Account,
+    Assets
 }
 
 export default agent;
