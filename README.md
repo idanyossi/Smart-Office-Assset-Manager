@@ -20,7 +20,6 @@ Accessing the Application
 
     Frontend UI: http://localhost:3000
 
-    Backend API (Swagger): http://localhost:7061/swagger 
 
 Testing the Requirements
 
