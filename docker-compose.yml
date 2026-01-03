@@ -1,5 +1,4 @@
 services:
-  # 1. Identity Service Database (Relational)
   identity-db:
     image: postgres:18.1
     container_name: smart_office_identity_db
@@ -14,7 +13,6 @@ services:
     logging:
       driver: "none"
 
-  # 2. Resource Management Database (NoSQL)
   resource-db:
     image: mongo:8.2.3
     container_name: smart_office_resource_db
@@ -37,11 +35,10 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
       - TokenKey=${TOKEN_KEY:-This_Is_A_Super_Secret_Key_For_Smart_Office_Assignment_2026_It_Needs_To_Be_At_Least_64_Characters_Long!}
-      # Use the container names 'identity-db' and 'resource-db' as hosts
       - ConnectionStrings__DefaultConnection=Host=identity-db;Port=5432;Database=IdentityDb;Username=${DB_USER:-postgres};Password=${DB_PASSWORD:-userDB1234}
       - MongoDB__ConnectionString=mongodb://${DB_USER:-postgres}:${DB_PASSWORD:-userDB1234}@resource-db:27017
     ports:
-      - "7061:8080" # Maps your 7061 to .NET 9's default 8080
+      - "7061:8080"
     depends_on:
       - identity-db
       - resource-db
@@ -52,7 +49,7 @@ services:
       dockerfile: Dockerfile
     container_name: smart_office_ui
     ports:
-      - "3000:80" # Maps standard React port 3000 to Nginx port 80
+      - "3000:80"
     depends_on:
       - backend-api
 
