@@ -17,7 +17,7 @@ export interface Asset {
     type: string;
 }
 
-axios.defaults.baseURL = 'https://localhost:7061/api';
+axios.defaults.baseURL = 'http://localhost:7061/api';
 
 axios.interceptors.request.use(config => {
     const token = window.localStorage.getItem('jwt');

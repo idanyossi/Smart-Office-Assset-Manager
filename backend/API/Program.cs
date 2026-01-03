@@ -32,10 +32,13 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp",
-        policy => policy.WithOrigins("http://localhost:5173")
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000", "http://localhost:5173") // Allow both just in case
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
+    });
 });
 
 builder.Services.AddAuthentication(options =>
@@ -76,18 +79,32 @@ app.UseAuthorization();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
     try
     {
         var context = services.GetRequiredService<AppDbContext>();
 
-        // Then apply any pending migrations
-        await context.Database.MigrateAsync();
-
+        // Add a simple retry logic for Docker startup
+        int retries = 10;
+        while (retries > 0)
+        {
+            try
+            {
+                await context.Database.MigrateAsync();
+                break; // Success!
+            }
+            catch
+            {
+                retries--;
+                if (retries == 0) throw;
+                logger.LogWarning("Database not ready yet... retrying in 2 seconds");
+                await Task.Delay(2000);
+            }
+        }
         Console.WriteLine("--> Database and Migrations are Ready!");
     }
     catch (Exception ex)
     {
-        var logger = services.GetRequiredService<ILogger<Program>>();
         logger.LogError(ex, "An error occurred during DB initialization");
     }
 }

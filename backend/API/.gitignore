@@ -4,12 +4,6 @@
 out/
 publish/
 
-# --- Sensitive Configuration (CRITICAL) ---
-# This prevents your DB passwords from being pushed to GitHub
-**/appsettings.json
-**/appsettings.Development.json
-**/appsettings.Production.json
-
 # --- User Secrets ---
 # Even if secrets are stored outside the folder, this is a safety net
 secrets.json
