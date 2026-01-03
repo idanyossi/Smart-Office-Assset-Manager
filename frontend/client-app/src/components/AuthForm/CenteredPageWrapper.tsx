@@ -13,6 +13,7 @@ export const CenteredPageWrapper = ({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        flexDirection: "column",
         bgcolor: theme.palette.background.default, 
         padding: 2,
       }}

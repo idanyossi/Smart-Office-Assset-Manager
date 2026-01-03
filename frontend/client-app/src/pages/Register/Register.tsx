@@ -1,12 +1,12 @@
 import { AuthForm } from "../../components/AuthForm/AuthForm";
 import { CenteredPageWrapper } from "../../components/AuthForm/CenteredPageWrapper";
 import type { AuthFormData } from "../../components/AuthForm/AuthForm";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { observer } from "mobx-react-lite"; // Import observer
 import { useStore } from "../../stores/store";
 import { useState } from "react";
 import axios from "axios";
-import { Alert, Snackbar } from "@mui/material";
+import { Alert, Snackbar, Box, Typography, Link } from "@mui/material";
 
 export const Register = observer(() => {
   const { userStore } = useStore();
@@ -40,6 +40,19 @@ export const Register = observer(() => {
   return (
     <CenteredPageWrapper>
       <AuthForm type="register" onSubmit={handleRegister} />
+      
+      <Box sx={{ mt: 2, textAlign: 'center' }}>
+        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          Already have an account?{" "}
+          <Link 
+            component={RouterLink} 
+            to="/login" 
+            sx={{ fontWeight: 'bold', textDecoration: 'none', color: 'primary.main' }}
+          >
+            Sign in
+          </Link>
+        </Typography>
+      </Box>
 
       <Snackbar open={feedback.open} autoHideDuration={6000} onClose={() => setFeedback(prev => ({...prev, open:false}))} anchorOrigin={{vertical: "top", horizontal:"center"}} 
         sx={{ 

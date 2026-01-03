@@ -2,9 +2,9 @@ import { AuthForm } from "../../components/AuthForm/AuthForm";
 import { CenteredPageWrapper } from "../../components/AuthForm/CenteredPageWrapper";
 import { observer } from "mobx-react-lite"; // Import observer
 import { useStore } from "../../stores/store";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink,useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Snackbar,Alert } from "@mui/material";
+import { Snackbar,Alert, Typography, Box, Link } from "@mui/material";
 import axios from "axios";
 
 export const Login = observer(() => {
@@ -42,6 +42,14 @@ export const Login = observer(() => {
   return (
     <CenteredPageWrapper>
       <AuthForm type="login" onSubmit={handleLogin} />
+      <Box sx={{ mt: 2, textAlign: 'center' }}>
+      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+        Don't have an account?{" "}
+        <Link component={RouterLink} to="/register" sx={{ fontWeight: 'bold', textDecoration: 'none' }}>
+          Create one now
+        </Link>
+      </Typography>
+    </Box>
 
       <Snackbar open={open} autoHideDuration={5000} onClose={() => setOpen(false)} anchorOrigin={{vertical: "top", horizontal:"center"}} 
         sx={{ 
