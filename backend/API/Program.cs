@@ -101,7 +101,19 @@ using (var scope = app.Services.CreateScope())
                 await Task.Delay(2000);
             }
         }
-        Console.WriteLine("--> Database and Migrations are Ready!");
+        await Task.Delay(1000); // Wait 2 seconds so the noisy "Attaching to..." logs finish first
+
+        Console.WriteLine("\n\n\n\n\n\n\n\n\n\n");
+        Console.WriteLine("############################################################");
+        Console.WriteLine("#                                                          #");
+        Console.WriteLine("#      SUCCESS: SMART-OFFICE SYSTEM IS ONLINE              #");
+        Console.WriteLine("#      --------------------------------------              #");
+        Console.WriteLine("#      Database Migrations: COMPLETED                      #");
+        Console.WriteLine("#      Frontend UI:         http://localhost:3000          #");
+        Console.WriteLine("#      Backend Swagger:     http://localhost:7061/swagger  #");
+        Console.WriteLine("#                                                          #");
+        Console.WriteLine("############################################################");
+        Console.WriteLine("\n\n");
     }
     catch (Exception ex)
     {

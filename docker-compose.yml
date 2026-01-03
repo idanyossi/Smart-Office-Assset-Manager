@@ -11,6 +11,8 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql
+    logging:
+      driver: "none"
 
   # 2. Resource Management Database (NoSQL)
   resource-db:
@@ -23,6 +25,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    logging:
+      driver: "none"
 
   backend-api:
     build:
@@ -32,6 +36,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
+      - TokenKey=${TOKEN_KEY:-This_Is_A_Super_Secret_Key_For_Smart_Office_Assignment_2026_It_Needs_To_Be_At_Least_64_Characters_Long!}
       # Use the container names 'identity-db' and 'resource-db' as hosts
       - ConnectionStrings__DefaultConnection=Host=identity-db;Port=5432;Database=IdentityDb;Username=${DB_USER:-postgres};Password=${DB_PASSWORD:-userDB1234}
       - MongoDB__ConnectionString=mongodb://${DB_USER:-postgres}:${DB_PASSWORD:-userDB1234}@resource-db:27017
