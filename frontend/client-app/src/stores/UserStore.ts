@@ -13,9 +13,31 @@ export default class UserStore{
     user: string | null = window.localStorage.getItem('username');
     token: string | null = window.localStorage.getItem('jwt');
     role: string | null = window.localStorage.getItem('userRole');
+    loadingInitial = true;
 
     constructor(){
         makeAutoObservable(this);
+        this.initStore();
+    }
+
+    get isLoggedIn() {
+        return !!this.token;
+    }
+
+    initStore = () => {
+        try {
+            const storedToken = window.localStorage.getItem('jwt');
+            const storedUser = window.localStorage.getItem('username');
+            const storedRole = window.localStorage.getItem('userRole');
+
+            if (storedToken) {
+                this.token = storedToken;
+                this.user = storedUser;
+                this.role = storedRole;
+            }
+        } finally {
+            this.loadingInitial = false;
+        }
     }
 
     login = async (creds: UserCredentials) =>{

@@ -5,8 +5,15 @@ import {
   Typography,
   Paper,
   MenuItem,
+  useTheme,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
 } from "@mui/material";
 import { useState } from "react";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 export interface AuthFormData {
   name: string;
@@ -25,6 +32,25 @@ export const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
     password: "",
     role: "Member",
   });
+  const theme = useTheme();
+
+  const [touched, setTouched] = useState({
+    name: false,
+    password: false
+  });
+
+  const passwordRequirements = [
+    { label: "At least 8 characters", valid: formData.password.length >= 8 },
+    { label: "One uppercase letter", valid: /[A-Z]/.test(formData.password) },
+    { label: "One lowercase letter", valid: /[a-z]/.test(formData.password) },
+    { label: "One special character (!@#$%^&*)", valid: /[!@#$%^&*]/.test(formData.password) },
+  ];
+
+  const isPasswordValid = type === "login" ? formData.password.length > 0 : passwordRequirements.every(req => req.valid);
+
+  const isNameValid = formData.name.trim().length > 0;
+
+  const isFormValid = isNameValid && isPasswordValid;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -35,13 +61,25 @@ export const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
     });
   };
 
+  const handleBlur = (field:"name" | "password") => {
+    setTouched(prev => ({...prev, [field]: true}));
+  }
+
+  const handleSubmit = () => {
+    if (isFormValid) {
+      onSubmit(formData);
+    } else {
+      setTouched({ name: true, password: true });
+    }
+  };
+
   return (
     <Paper
       sx={{
         p: 4,
-        bgcolor: "#161616",
+        bgcolor: theme.palette.background.paper,
         borderRadius: 0,
-        border: "1px solid #333",
+        border: `1px solid ${theme.palette.divider}`,
         width: "100%",
         maxWidth: 400,
       }}
@@ -49,7 +87,7 @@ export const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
       <Typography
         variant="h5"
         sx={{
-          color: "#00adef",
+          color: theme.palette.primary.main,
           mb: 3,
           fontWeight: "bold",
           textAlign: "center",
@@ -63,6 +101,7 @@ export const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
         noValidate
         sx={{ display: "flex", flexDirection: "column", gap: 2 }}
       >
+        {/* Name Field */}
         <TextField
           label="Name"
           name="name"
@@ -70,6 +109,9 @@ export const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
           fullWidth
           value={formData.name}
           onChange={handleChange}
+          onBlur={() => handleBlur("name")}
+          error={touched.name && !isNameValid}
+          helperText={touched.name && !isNameValid ? "Name is required" : ""}
         />
 
         <TextField
@@ -80,8 +122,45 @@ export const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
           fullWidth
           value={formData.password}
           onChange={handleChange}
+          onBlur={() => handleBlur("password")}
+          error={touched.password && !isPasswordValid}
+          helperText={type === 'login' && touched.password && !isPasswordValid ? "Password is required" : ""}
         />
 
+        {type === "register" && (
+          <Box sx={{ 
+            p: 1.5, 
+            bgcolor: theme.palette.action.hover, // Subtle background
+            borderRadius: 1,
+            border: `1px solid ${theme.palette.divider}`
+          }}>
+            <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 'bold' }}>
+              Password Requirements:
+            </Typography>
+            <List dense disablePadding>
+              {passwordRequirements.map((req) => (
+                <ListItem key={req.label} disablePadding sx={{ py: 0.2 }}>
+                  <ListItemIcon sx={{ minWidth: 28 }}>
+                    {req.valid ? (
+                      <CheckCircleIcon color="success" sx={{ fontSize: 18 }} />
+                    ) : (
+                      <CancelIcon color={touched.password ? "error" : "disabled"} sx={{ fontSize: 18 }} />
+                    )}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={req.label}
+                    primaryTypographyProps={{
+                      variant: 'caption',
+                      // Color text red only if they have started typing and it's still wrong
+                      color: req.valid ? 'text.primary' : (touched.password ? 'error' : 'text.secondary')
+                    }}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        )}
+        
         {/* Role selection is only required for registration  */}
         {type === "register" && (
           <TextField
@@ -100,7 +179,7 @@ export const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
         <Button
           variant="contained"
           fullWidth
-          onClick={() => onSubmit(formData)}
+          onClick={handleSubmit}
           sx={{ borderRadius: 0, mt: 2, py: 1.5, fontWeight: "bold" }}
         >
           {type === "login" ? "LOGIN" : "REGISTER"}

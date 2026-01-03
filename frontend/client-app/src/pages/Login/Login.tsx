@@ -1,12 +1,18 @@
 import { AuthForm } from "../../components/AuthForm/AuthForm";
 import { CenteredPageWrapper } from "../../components/AuthForm/CenteredPageWrapper";
-import {observer} from "mobx-react-lite"; // Import observer
+import { observer } from "mobx-react-lite"; // Import observer
 import { useStore } from "../../stores/store";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Snackbar,Alert } from "@mui/material";
+import axios from "axios";
 
 export const Login = observer(() => {
   const { userStore } = useStore();
   const navigate = useNavigate();
+
+  const [open,setOpen] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   // Define the interface for the incoming form data
   const handleLogin = async (data: { name: string; password: string }) => {
@@ -17,17 +23,35 @@ export const Login = observer(() => {
 
     try {
       await userStore.login(payload);
-      
       navigate("/"); 
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Login failed", error);
-      alert("Invalid username or password");
+
+        if (axios.isAxiosError(error)) {
+        // If backend returns { message: "..." }, this captures it
+        const backendMessage = error.response?.data?.message || "Invalid username or password.";
+        setErrorMsg(backendMessage);
+      } else {
+        // Fallback for non-Axios errors
+        setErrorMsg("A network error occurred. Please try again later.");
+      }
+        setOpen(true);
     }
   };
 
   return (
     <CenteredPageWrapper>
       <AuthForm type="login" onSubmit={handleLogin} />
+
+      <Snackbar open={open} autoHideDuration={5000} onClose={() => setOpen(false)} anchorOrigin={{vertical: "top", horizontal:"center"}} 
+        sx={{ 
+        top: '80px !important'
+        }}
+        >
+        <Alert severity="error" variant="filled" onClose={() => setOpen(false)}>
+          {errorMsg}
+        </Alert>
+      </Snackbar>
     </CenteredPageWrapper>
   );
 });
