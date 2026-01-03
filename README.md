@@ -63,6 +63,8 @@ As permitted by the "Open Tool" policy, the following resources were used during
 
     Gemini (AI Assistant): Used for architecting the Docker Compose variable interpolation and debugging the .NET 9 internal networking logic. Also used for code snippet examples and conceptual i needed advice for.
 
+    Github Copilot (AI Auto Completions): Used suggestions made by the Github Copilot AI Assistant if the suggestion seemed fit
+
     Official Documentation: Microsoft Learn (.NET 9 Container defaults), Docker Documentation (Volume persistence) and MUI official documentation (Component use).
 
 
