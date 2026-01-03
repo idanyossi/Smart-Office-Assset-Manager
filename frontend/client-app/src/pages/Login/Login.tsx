@@ -41,7 +41,7 @@ export const Login = observer(() => {
 
   return (
     <CenteredPageWrapper>
-      <AuthForm type="login" onSubmit={handleLogin} />
+      <AuthForm type="login" onSubmit={handleLogin} isLoading={userStore.loading} />
       <Box sx={{ mt: 2, textAlign: 'center' }}>
       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
         Don't have an account?{" "}

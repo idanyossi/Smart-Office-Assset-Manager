@@ -39,7 +39,7 @@ export const Register = observer(() => {
 
   return (
     <CenteredPageWrapper>
-      <AuthForm type="register" onSubmit={handleRegister} />
+      <AuthForm type="register" onSubmit={handleRegister} isLoading={userStore.loading} />
       
       <Box sx={{ mt: 2, textAlign: 'center' }}>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>

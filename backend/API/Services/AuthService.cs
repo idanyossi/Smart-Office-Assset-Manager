@@ -8,7 +8,7 @@ namespace API.Services
     public interface IAuthService
     {
         Task<IdentityResult> RegisterUserAsync(RegisterDto dto);
-        Task<String?> LoginUserAsync(LoginDto dto);
+        Task<LoginResponseDto?> LoginUserAsync(LoginDto dto);
 
     }
     public class AuthService : IAuthService
@@ -42,7 +42,7 @@ namespace API.Services
             return result;
         }
 
-        public async Task<string?> LoginUserAsync(LoginDto dto)
+        public async Task<LoginResponseDto?> LoginUserAsync(LoginDto dto)
         {
             var user = await _userManager.FindByNameAsync(dto.Username);
             if (user == null)
@@ -55,7 +55,11 @@ namespace API.Services
             {
                 // Return JWT token
                 var token = await _tokenService.CreateToken(user);
-                return token;
+                return new LoginResponseDto
+                {
+                    Username = user.UserName!,
+                    Token = token
+                };
             }
             return null;
         }

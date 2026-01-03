@@ -24,19 +24,21 @@ namespace API.Controllers
             {
                 return Ok(new { Message = "User registered successfully" });
             }
-            return BadRequest(result.Errors);
+            var firstErrorMessage = result.Errors.FirstOrDefault()?.Description ?? "Registration failed";
+            return BadRequest(new { Message = firstErrorMessage });
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var token = await _authService.LoginUserAsync(dto);
-            if (token != null)
+            var LoginResponse = await _authService.LoginUserAsync(dto);
+
+            if (LoginResponse != null)
             {
                 return Ok(new
                 {
-                    Username = dto.Username,
-                    Token = token
+                    Username = LoginResponse.Username,
+                    Token = LoginResponse.Token
                 });
             }
             return Unauthorized(new { Message = "Invalid username or password" });

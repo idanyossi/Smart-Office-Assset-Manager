@@ -14,6 +14,7 @@ export default class UserStore{
     token: string | null = window.localStorage.getItem('jwt');
     role: string | null = window.localStorage.getItem('userRole');
     loadingInitial = true;
+    loading = false;
 
     constructor(){
         makeAutoObservable(this);
@@ -41,20 +42,36 @@ export default class UserStore{
     }
 
     login = async (creds: UserCredentials) =>{
-        const UserResponse = await agent.Account.login(creds);
-        const decodedToken : JwtPayload = jwtDecode(UserResponse.token);
-        runInAction(()=>{
-            this.user = UserResponse.username;
-            this.token = UserResponse.token;
-            this.role = decodedToken.role;
-        });
-        window.localStorage.setItem('username', UserResponse.username);
-        window.localStorage.setItem('jwt', UserResponse.token);
-        window.localStorage.setItem('userRole', decodedToken.role);
+       runInAction(() => this.loading = true);
+        try {
+            const UserResponse = await agent.Account.login(creds);
+            const decodedToken: JwtPayload = jwtDecode(UserResponse.token);
+            
+            runInAction(() => {
+                this.user = UserResponse.username;
+                this.token = UserResponse.token;
+                this.role = decodedToken.role;
+            });
+
+            window.localStorage.setItem('username', UserResponse.username);
+            window.localStorage.setItem('jwt', UserResponse.token);
+            window.localStorage.setItem('userRole', decodedToken.role);
+        } finally {
+            runInAction(() => {
+                this.loading = false;
+            });
+        }
     }
 
     register = async (creds: UserCredentials) =>{
+       runInAction(() => this.loading = true);
+    try {
         await agent.Account.register(creds);
+    }   finally {
+        runInAction(() => {
+            this.loading = false;
+        });
+    }
     }
 
     logout = () => {

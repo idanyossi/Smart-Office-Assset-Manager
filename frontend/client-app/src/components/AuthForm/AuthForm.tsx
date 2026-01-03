@@ -10,6 +10,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  CircularProgress,
 } from "@mui/material";
 import { useState } from "react";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -24,9 +25,10 @@ export interface AuthFormData {
 interface AuthFormProps {
   type: "login" | "register";
   onSubmit: (data: AuthFormData) => void;
+  isLoading?: boolean;
 }
 
-export const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
+export const AuthForm = ({ type, onSubmit, isLoading }: AuthFormProps) => {
   const [formData, setFormData] = useState<AuthFormData>({
     name: "",
     password: "",
@@ -180,9 +182,14 @@ export const AuthForm = ({ type, onSubmit }: AuthFormProps) => {
           variant="contained"
           fullWidth
           onClick={handleSubmit}
+          disabled = {isLoading || !isFormValid}
           sx={{ borderRadius: 0, mt: 2, py: 1.5, fontWeight: "bold" }}
         >
-          {type === "login" ? "LOGIN" : "REGISTER"}
+          {isLoading ? (
+          <CircularProgress size={24} sx={{ color: 'white' }} />
+            ) : (
+              type === "login" ? "LOGIN" : "REGISTER"
+            )}
         </Button>
       </Box>
     </Paper>
