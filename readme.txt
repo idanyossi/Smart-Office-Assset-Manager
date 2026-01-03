@@ -1,1 +1,0 @@
-decided to decode the token for the role instead of adding role to user credentials since role is not needed for login and we want to preserve readability and good practices

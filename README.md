@@ -12,7 +12,7 @@ Execution
 
     Run the following command:
 
-docker-compose up --build
+    docker-compose up --build
 
 Wait for the terminal to show --> Database and Migrations are Ready!.
 
@@ -34,25 +34,35 @@ RBAC: Log in as an "Admin" to see the "Add Asset" functionality. This is hidden 
 
 2. Reflections & Technical Bottlenecks
 
-During the containerization of this enterprise stack, two primary technical challenges were encountered and resolved:
-A. Docker Startup Race Conditions (Database Readiness)
+A. Learning the New Stack (MobX & MUI)
 
-Issue: Upon running docker-compose up, the .NET Backend attempted to run Entity Framework migrations before the PostgreSQL container was fully initialized and ready to accept connections. This resulted in a "Connection Refused" exception and a crash of the API service.
+The assignment required using MobX and MUI 5, which were new to me.
 
-Solution: Implemented a resilient migration strategy in Program.cs. Instead of a single migration attempt, I wrapped the logic in a retry loop with a 2-second delay. This ensures the application waits for its dependencies to reach a "Ready" state before executing DDL commands, ensuring consistent deployments regardless of hardware speed.
-B. CORS Preflight Failures in Containerized Environments
+    The Struggle: Switching from standard React state to MobX "Observables" was a new experience at first. I had to learn how to make the UI "react" to store changes without manual refreshes.
 
-Issue: The browser blocked requests from the React frontend (3000) to the API (7061) with a "Status code: null" error. This was caused by a protocol mismatch where the frontend was attempting to use https while the Linux-based Docker containers were running on standard http.
+    The Fix: I set up a UserStore to hold the JWT. Now, as soon as you log in, MUI components (like the "Add Asset" button) automatically appear or disappear based on your role without any messy code.
 
-Solution: Synchronized the transport layer to standard HTTP for internal bridge networking. I explicitly configured a CORS policy in .NET 9 to whitelist the specific host origins and disabled the HttpsRedirection middleware for the development orchestration to ensure a seamless "handshake" between the client and server.
+B. First Time with JWT Security
+
+This was my first time implementing a full JWT (JSON Web Token) handshake.
+
+    The Struggle: Getting the Resource Service to trust a token created by the Auth Service was tricky. I had to make sure both services used the exact same "Secret Key" and validation logic.
+
+    The Fix: I learned that JWTs are stateless. Once I got the signature validation right, the Resource Service could verify who a user was without even talking to the database.
+
+C. Solving the "Docker Race"
+
+When running docker-compose up, the API would often try to start before the database was actually up, causing a crash.
+
+    The Fix: I wrote a retry loop in Program.cs. Now, the app waits and retries the connection until the DB is ready, making the startup process smooth.
+
 
 3. Tooling Disclosure
 
 As permitted by the "Open Tool" policy, the following resources were used during development:
 
-    Gemini (AI Assistant): Used for architecting the Docker Compose variable interpolation and debugging the .NET 9 internal networking logic.
+    Gemini (AI Assistant): Used for architecting the Docker Compose variable interpolation and debugging the .NET 9 internal networking logic. Also used for code snippet examples and conceptual i needed advice for.
 
-    Official Documentation: Microsoft Learn (.NET 9 Container defaults) and Docker Documentation (Volume persistence).
+    Official Documentation: Microsoft Learn (.NET 9 Container defaults), Docker Documentation (Volume persistence) and MUI official documentation (Component use).
 
-    Nginx: Utilized as a high-performance production-grade reverse proxy to serve the React static assets.
 
