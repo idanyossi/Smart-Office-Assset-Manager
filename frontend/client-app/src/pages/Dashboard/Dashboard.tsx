@@ -125,7 +125,7 @@ export const Dashboard = observer(() => {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleAddAsset} variant="contained" disabled={!newAsset.name || !newAsset.type}>
-            Save to MongoDB
+            Save And Add
           </Button>
         </DialogActions>
       </Dialog>
